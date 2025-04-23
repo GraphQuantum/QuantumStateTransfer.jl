@@ -4,7 +4,7 @@ CurrentModule = QuantumStateTransfer
 
 # QuantumStateTransfer
 
-Documentation for [QuantumStateTransfer](https://github.com/Luis-Varona/QuantumStateTransfer.jl).
+Documentation for [QuantumStateTransfer](https://github.com/GraphQuantum/QuantumStateTransfer.jl).
 
 ```@index
 ```

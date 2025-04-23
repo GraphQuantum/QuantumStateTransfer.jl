@@ -32,6 +32,11 @@ jobs:
           - x64
     steps:
       - uses: actions/checkout@v4
+      - name: Remove stale manifest on nightly
+        if: matrix.version == 'pre'
+        run: |
+          rm -f Manifest.toml
+          julia -e 'using Pkg; Pkg.resolve(); Pkg.instantiate()'
       - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.version }}

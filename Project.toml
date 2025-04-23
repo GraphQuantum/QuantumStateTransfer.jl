@@ -6,7 +6,7 @@ authors = ["Luis M. B. Varona <lbvarona@mta.ca>", "Nathaniel Johnston <njohnston
 description = "A Julia package for modelling state transfer on quantum spin networks."
 maintainers = ["Luis M. B. Varona <lbvarona@mta.ca>"]
 readme = "README.md"
-repository = "https://github.com/Luis-Varona/QuantumStateTransfer.jl"
+repository = "https://github.com/GraphQuantum/QuantumStateTransfer.jl"
 version = "0.1.0-dev"
 
 [deps]

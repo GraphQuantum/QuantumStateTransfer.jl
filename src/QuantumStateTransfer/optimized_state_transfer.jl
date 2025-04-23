@@ -148,6 +148,7 @@ QubitPairTransfer(1, 2, false, 0.25, 2.35619)
 
 julia> qubit_pair_transfer(C4_graph, 1, 3) # There is PST from node 1 to node 3 over time π/2
 QubitPairTransfer(1, 3, true, 1.0, 1.5708)
+```
 """
 function qubit_pair_transfer(
     adj_mat::AbstractMatrix{<:Real},
