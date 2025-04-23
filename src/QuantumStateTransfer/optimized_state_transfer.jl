@@ -143,10 +143,10 @@ julia> C4_adj = BitMatrix([0 1 0 1; # Cycle graph on 4 vertices (adj. matrix for
 
 julia> C4_graph = Graph(C4_adj); # Cycle graph on 4 vertices (graph format)
 
-julia> qubit_pair_transfer(C4_adj, 1, 2) # There is no PST from node 1 to node 2
-QubitPairTransfer(1, 2, false, 0.25, 2.35619)
+julia> qubit_pair_transfer(C4_adj, 1, 2, max_time=π) # No PST from node 1 to node 2
+QubitPairTransfer(1, 2, false, 0.25, 0.7854)
 
-julia> qubit_pair_transfer(C4_graph, 1, 3) # There is PST from node 1 to node 3 over time π/2
+julia> qubit_pair_transfer(C4_graph, 1, 3, max_time=π) # PST from node 1 to node 3 over time π/2
 QubitPairTransfer(1, 3, true, 1.0, 1.5708)
 ```
 """
