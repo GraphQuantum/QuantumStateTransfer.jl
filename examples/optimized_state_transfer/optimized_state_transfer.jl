@@ -19,29 +19,27 @@ of the complete graph on 2 vertices. (The resulting product has exactly `2ⁿ` v
 function hypercube_graph(n::Int)
     hc = Graph(1)
     k2 = complete_graph(2)
-    
-    for _ in 1:n
+
+    for _ = 1:n
         hc = cartesian_product(hc, k2)
     end
-    
+
     return hc
 end
 
 
 N = 4
 
-for n in 1:N
+for n = 1:N
     hc = hypercube_graph(n)
     @info "Data on state transfer on the $n-hypercube:"
-    
+
     @time begin
-        for (i, qpt) in enumerate(
-            collect(optimized_state_transfer(hc).qubit_pairs),
-        )
+        for (i, qpt) in enumerate(collect(optimized_state_transfer(hc).qubit_pairs))
             println("($i) $qpt")
         end
     end
-    
+
     println()
 end
 

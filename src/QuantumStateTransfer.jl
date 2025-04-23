@@ -14,7 +14,7 @@ include("QuantumStateTransfer/optimized_state_transfer.jl")
 include("QuantumStateTransfer/precompile_workload.jl")
 
 export UnitaryEvolution, unitary_evolution, track_qubit_amplitude
-export OptimizedStateTransfer, QubitPairTransfer,
-    optimized_state_transfer, qubit_pair_transfer
+export OptimizedStateTransfer,
+    QubitPairTransfer, optimized_state_transfer, qubit_pair_transfer
 
 end

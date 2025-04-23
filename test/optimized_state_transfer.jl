@@ -26,7 +26,7 @@ using Graphs
 # @time @testset "qubit_pair_transfer" begin
 #     qpt1 = qubit_pair_transfer(C4_adj, source, dest1)
 #     qpt2 = qubit_pair_transfer(C4_graph, source, dest2)
-    
+
 #     @test qpt1.maximum_fidelity ≈ maximum_fidelity1
 #     @test qpt2.is_pst == is_pst2
 #     @test is_optimal_time1(qpt1.optimal_time)
@@ -51,11 +51,11 @@ of the complete graph on 2 vertices. (The resulting product has exactly `2ⁿ` v
 function hypercube_graph(n::Int)
     hc = Graph(1)
     k2 = complete_graph(2)
-    
-    for _ in 1:n
+
+    for _ = 1:n
         hc = cartesian_product(hc, k2)
     end
-    
+
     return hc
 end
 
@@ -81,14 +81,14 @@ length, as the hypercube is unweighted.
 qubit pairs in the `n`-hypercube.
 """
 function hypercube_pst_pairs(n::Int)
-    pst_pairs = Tuple{Int, Int}[]
+    pst_pairs = Tuple{Int,Int}[]
     num_nodes = (n == 0) ? 0 : 2^n
     nodes = 1:num_nodes
     marked = falses(num_nodes)
-    
+
     hc = hypercube_graph(n)
     dijkstra_states = map(u -> dijkstra_shortest_paths(hc, u), nodes)
-    
+
     for u in nodes
         if !marked[u]
             marked[u] = true
@@ -97,7 +97,7 @@ function hypercube_pst_pairs(n::Int)
             marked[v] || (marked[v] = true; push!(pst_pairs, pair))
         end
     end
-    
+
     return pst_pairs
 end
 
@@ -107,12 +107,10 @@ hypercubes = map(hypercube_graph, 1:N)
 pst_pairs_theory = map(hypercube_pst_pairs, 1:N)
 
 @time @testset "optimized_state_transfer" begin
-    for n in 1:N
+    for n = 1:N
         all_pairs = collect(optimized_state_transfer(hypercubes[n]).qubit_pairs)
-        pst_pairs_actual = map(
-            qpt -> (qpt.source, qpt.dest),
-            filter(qpt -> qpt.is_pst, all_pairs)
-        )
+        pst_pairs_actual =
+            map(qpt -> (qpt.source, qpt.dest), filter(qpt -> qpt.is_pst, all_pairs))
         @test pst_pairs_theory[n] == pst_pairs_actual
     end
 end

@@ -25,7 +25,8 @@ end
 function Base.show(io::IO, ost::OptimizedStateTransfer)
     buffer = IOBuffer()
     show(IOContext(buffer), "text/plain", ost.adjacency_matrix)
-    s1 = String(take!(buffer)); s1 = s1[1:(findfirst(isequal(':'), s1) - 1)]
+    s1 = String(take!(buffer));
+    s1 = s1[1:(findfirst(isequal(':'), s1)-1)]
     s2 = ost.exhibits_pst
     s3 = "QubitPairTransfer Base.Generator"
     out = "OptimizedStateTransfer($s1, $s2, $s3)"
@@ -57,7 +58,7 @@ end
 
 function Base.show(io::IO, qpt::QubitPairTransfer)
     (s1, s2, s3) = (qpt.source, qpt.dest, qpt.is_pst)
-    (s4, s5) = round.([qpt.maximum_fidelity, qpt.optimal_time], digits=5)
+    (s4, s5) = round.([qpt.maximum_fidelity, qpt.optimal_time], digits = 5)
     out = "QubitPairTransfer($s1, $s2, $s3, $s4, $s5)"
     print(io, out)
 end
@@ -87,10 +88,9 @@ Add later
 """
 function optimized_state_transfer(adj_mat::AbstractMatrix{<:Real}; kwargs...)
     n = size(adj_mat, 1)
-    uvs = [(u, v) for u in 1:(n - 1) for v in (u + 1):n]
-    qubit_pairs = Base.Generator(
-        uv -> qubit_pair_transfer(adj_mat, uv[1], uv[2]; kwargs...), uvs
-    )
+    uvs = [(u, v) for u = 1:(n-1) for v = (u+1):n]
+    qubit_pairs =
+        Base.Generator(uv -> qubit_pair_transfer(adj_mat, uv[1], uv[2]; kwargs...), uvs)
     exhibits_pst = any(qpt -> qpt.is_pst, qubit_pairs)
     return OptimizedStateTransfer(adj_mat, exhibits_pst, qubit_pairs)
 end
@@ -150,32 +150,39 @@ julia> qubit_pair_transfer(C4_graph, 1, 3) # There is PST from node 1 to node 3 
 QubitPairTransfer(1, 3, true, 1.0, 1.5708)
 """
 function qubit_pair_transfer(
-    adj_mat::AbstractMatrix{<:Real}, source::Int, dest::Int;
-    min_time::Real=MIN_TIME,
-    max_time::Real=MAX_TIME,
-    tol::Real=DEFAULT_TOL,
+    adj_mat::AbstractMatrix{<:Real},
+    source::Int,
+    dest::Int;
+    min_time::Real = MIN_TIME,
+    max_time::Real = MAX_TIME,
+    tol::Real = DEFAULT_TOL,
 )
     (adj_mat == adj_mat') || throw(DomainError(adj_mat, ADJ_MAT_ERR))
-    
+
     n = size(adj_mat, 1)
-    source_state = falses(n); source_state[source] = true
-    dest_state = falses(n); dest_state[dest] = true
+    source_state = falses(n);
+    source_state[source] = true
+    dest_state = falses(n);
+    dest_state[dest] = true
     fidelity(time::Float64) = abs2(source_state' * exp(im * time * adj_mat) * dest_state)
-    
+
     lower = Float64(min_time)
     upper = Float64(max_time)
     lipschitz = 2 * norm(adj_mat, 2)
-    
-    res = maximize_shubert(fidelity, lower, upper, lipschitz; tol=tol)
+
+    res = maximize_shubert(fidelity, lower, upper, lipschitz; tol = tol)
     maximum_fidelity = res.maximum
     optimal_time = res.maximizer
     is_pst = maximum_fidelity > 1 - tol
-    
+
     return QubitPairTransfer(source, dest, is_pst, maximum_fidelity, optimal_time)
 end
 
 @inline function qubit_pair_transfer(
-    graph::AbstractGraph{Int}, source::Int, dest::Int; kwargs...
+    graph::AbstractGraph{Int},
+    source::Int,
+    dest::Int;
+    kwargs...,
 )
     MatType = hasproperty(graph, :weights) ? Matrix : BitMatrix
     adj_mat = MatType(adjacency_matrix(graph))
