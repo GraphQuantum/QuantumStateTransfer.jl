@@ -4,7 +4,6 @@ using Test
 using QuantumStateTransfer: optimized_state_transfer, qubit_pair_transfer
 using Graphs
 
-
 ### TODO: This is just stuff linked to the old API. I'll figure out what to do
 ### with it some other time; anyway, the rest of the test suite is a mess too.
 # C4_adj = BitMatrix([0 1 0 1;
@@ -22,7 +21,6 @@ using Graphs
 # is_optimal_time1(time::Real) = time % 2π ≈ 3π / 4
 # is_optimal_time2(time::Real) = time % 2π ≈ π / 2
 
-
 # @time @testset "qubit_pair_transfer" begin
 #     qpt1 = qubit_pair_transfer(C4_adj, source, dest1)
 #     qpt2 = qubit_pair_transfer(C4_graph, source, dest2)
@@ -32,7 +30,6 @@ using Graphs
 #     @test is_optimal_time1(qpt1.optimal_time)
 #     @test is_optimal_time2(qpt2.optimal_time)
 # end
-
 
 """
     hypercube_graph(n::Int)
@@ -52,13 +49,12 @@ function hypercube_graph(n::Int)
     hc = Graph(1)
     k2 = complete_graph(2)
 
-    for _ = 1:n
+    for _ in 1:n
         hc = cartesian_product(hc, k2)
     end
 
     return hc
 end
-
 
 # TODO: Use matrix power trick for each row instead?
 """
@@ -94,23 +90,23 @@ function hypercube_pst_pairs(n::Int)
             marked[u] = true
             v = findfirst(isequal(n), dijkstra_states[u].dists)
             pair = u < v ? (u, v) : (v, u)
-            marked[v] || (marked[v] = true; push!(pst_pairs, pair))
+            marked[v] || (marked[v]=true; push!(pst_pairs, pair))
         end
     end
 
     return pst_pairs
 end
 
-
 N = 4
 hypercubes = map(hypercube_graph, 1:N)
 pst_pairs_theory = map(hypercube_pst_pairs, 1:N)
 
 @time @testset "optimized_state_transfer" begin
-    for n = 1:N
+    for n in 1:N
         all_pairs = collect(optimized_state_transfer(hypercubes[n]).qubit_pairs)
-        pst_pairs_actual =
-            map(qpt -> (qpt.source, qpt.dest), filter(qpt -> qpt.is_pst, all_pairs))
+        pst_pairs_actual = map(
+            qpt -> (qpt.source, qpt.dest), filter(qpt -> qpt.is_pst, all_pairs)
+        )
         @test pst_pairs_theory[n] == pst_pairs_actual
     end
 end

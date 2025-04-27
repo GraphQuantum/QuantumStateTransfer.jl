@@ -1,0 +1,6 @@
+[deps]
+CodecZstd = "6b39b394-51ab-5f42-8807-6242bab2b4c2"
+Conda = "8f4d0f93-b110-5947-807f-2305c1781a2d"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
+QuantumStateTransfer = "34a31443-0e20-4b48-9031-55d81b0a9864"
