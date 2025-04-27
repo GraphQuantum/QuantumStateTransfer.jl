@@ -1,4 +1,0 @@
-[deps]
-Conda = "8f4d0f93-b110-5947-807f-2305c1781a2d"
-PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
-QuantumStateTransfer = "34a31443-0e20-4b48-9031-55d81b0a9864"

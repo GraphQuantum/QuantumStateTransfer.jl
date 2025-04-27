@@ -1,6 +1,5 @@
-const TIME_STEPS::StepRangeLen{Float64} = 0:(π/200):5
+const TIME_STEPS::StepRangeLen{Float64} = 0:(π / 200):5
 const TIME_STEPS_STR::String = "0:(π / 200):5"
-
 
 """
     UnitaryEvolution
@@ -22,7 +21,6 @@ struct UnitaryEvolution
     transfer_amplitudes::Array{ComplexF64,3}
     transfer_fidelities::Array{Float64,3}
 end
-
 
 """
     unitary_evolution(
@@ -127,12 +125,10 @@ julia> evolution.transfer_fidelities # State transfer fidelities between qubits
 ```
 """
 function unitary_evolution(
-    adj_mat::AbstractMatrix{<:Real},
-    time_steps::AbstractVector{<:Real} = TIME_STEPS,
+    adj_mat::AbstractMatrix{<:Real}, time_steps::AbstractVector{<:Real}=TIME_STEPS
 )
     amps_vec = map(
-        u -> track_qubit_amplitude(adj_mat, u, time_steps = time_steps),
-        1:size(adj_mat, 1),
+        u -> track_qubit_amplitude(adj_mat, u; time_steps=time_steps), 1:size(adj_mat, 1)
     )
     transfer_amplitudes = stack(amps_vec)
     transfer_fidelities = abs2.(transfer_amplitudes)
@@ -140,14 +136,12 @@ function unitary_evolution(
 end
 
 @inline function unitary_evolution(
-    graph::AbstractGraph{Int},
-    time_steps::AbstractVector{<:Real} = TIME_STEPS,
+    graph::AbstractGraph{Int}, time_steps::AbstractVector{<:Real}=TIME_STEPS
 )
     MatType = hasproperty(graph, :weights) ? Matrix : BitMatrix
     adj_mat = MatType(adjacency_matrix(graph))
     return unitary_evolution(adj_mat, time_steps)
 end
-
 
 """
     track_qubit_amplitude(
@@ -195,8 +189,8 @@ julia> amps_3_to_247 = track_qubit_amplitude(g, source, dests=dests, time_steps=
 function track_qubit_amplitude(
     adj_mat::AbstractMatrix{<:Real},
     source::Int;
-    dests::AbstractVector{Int} = 1:size(adj_mat, 1),
-    time_steps::AbstractVector{<:Real} = TIME_STEPS,
+    dests::AbstractVector{Int}=1:size(adj_mat, 1),
+    time_steps::AbstractVector{<:Real}=TIME_STEPS,
 )
     (adj_mat == adj_mat') || throw(DomainError(adj_mat, ADJ_MAT_ERR))
 
