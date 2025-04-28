@@ -7,18 +7,15 @@ using .ErrorMessages.ShubertPiyavskii
 
 export GlobalMaximizationResult, maximize_shubert
 
-
 const RealT = Float64
 # TODO: Another "standard" option is 1e-5... but SP runs too slow then. Decide?
 const DEFAULT_TOL = 0.01
-
 
 struct GlobalMaximizationResult
     maximizer::RealT
     maximum::RealT
     tol::RealT
 end
-
 
 struct _SearchInterval
     x_lower::RealT
@@ -28,11 +25,7 @@ struct _SearchInterval
     upper_bound::RealT
 
     function _SearchInterval(
-        x_lower::RealT,
-        x_upper::RealT,
-        y_lower::RealT,
-        y_upper::RealT,
-        lipschitz::RealT,
+        x_lower::RealT, x_upper::RealT, y_lower::RealT, y_upper::RealT, lipschitz::RealT
     )
         upper_bound = (lipschitz * (x_upper - x_lower) + y_lower + y_upper) / 2
         return new(x_lower, x_upper, y_lower, y_upper, upper_bound)
@@ -41,14 +34,13 @@ end
 
 Base.isless(A::_SearchInterval, B::_SearchInterval) = A.upper_bound < B.upper_bound
 
-
 # TODO: Add parallelization over subintervals of the initial optimization range
 function maximize_shubert(
     objective::Function,
     x_lower::RealT,
     x_upper::RealT,
     lipschitz::RealT;
-    tol::RealT = DEFAULT_TOL,
+    tol::RealT=DEFAULT_TOL,
 )
     x_lower < x_upper || throw(DomainError([x_lower, x_upper], OPTIM_RANGE_ERR))
     lipschitz >= 0 || throw(DomainError(lipschitz, LIPSCHITZ_ERR))
@@ -86,20 +78,18 @@ function maximize_shubert(
     return GlobalMaximizationResult(maximizer, maximum, tol)
 end
 
-
 @inline # TODO: Should benchmark to see if this actually helps
 function _split_search_interval(
-    search_interval::_SearchInterval,
-    objective::Function,
-    lipschitz::RealT,
+    search_interval::_SearchInterval, objective::Function, lipschitz::RealT
 )
     x_lower = search_interval.x_lower
     x_upper = search_interval.x_upper
     y_lower = search_interval.y_lower
     y_upper = search_interval.y_upper
 
-    x_sample =
-        clamp((x_lower + x_upper + (y_upper - y_lower) / lipschitz) / 2, x_lower, x_upper)
+    x_sample = clamp(
+        (x_lower + x_upper + (y_upper - y_lower) / lipschitz) / 2, x_lower, x_upper
+    )
     y_sample = objective(x_sample)
 
     child1 = _SearchInterval(x_lower, x_sample, y_lower, y_sample, lipschitz)

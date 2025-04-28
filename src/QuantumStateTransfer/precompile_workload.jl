@@ -8,8 +8,7 @@
 
     @compile_workload begin
         unitary_evolution(g, time_steps)
-        ost =
-            optimized_state_transfer(g; min_time = min_time, max_time = max_time, tol = tol)
+        ost = optimized_state_transfer(g; min_time=min_time, max_time=max_time, tol=tol)
         collect(ost.qubit_pairs) # Eager instantiation of `QubitPairTransfer` structs
     end
 end
