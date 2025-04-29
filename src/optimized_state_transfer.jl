@@ -166,7 +166,7 @@ function qubit_pair_transfer(
 
     lower = Float64(min_time)
     upper = Float64(max_time)
-    lipschitz = 2 * norm(adj_mat, 2)
+    lipschitz = norm(adj_mat, 2) # TODO: Explain why this works in the docs
 
     res = maximize_shubert(fidelity, lower, upper, lipschitz; tol=tol)
     maximum_fidelity = res.maximum
