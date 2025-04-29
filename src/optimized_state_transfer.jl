@@ -141,7 +141,7 @@ julia> C4_adj = BitMatrix([0 1 0 1; # Cycle graph on 4 vertices (adj. matrix for
 julia> C4_graph = Graph(C4_adj); # Cycle graph on 4 vertices (graph format)
 
 julia> qubit_pair_transfer(C4_adj, 1, 2, max_time=π) # No PST from node 1 to node 2
-QubitPairTransfer(1, 2, false, 0.25, 0.7854)
+QubitPairTransfer(1, 2, false, 0.25, 2.35619)
 
 julia> qubit_pair_transfer(C4_graph, 1, 3, max_time=π) # PST from node 1 to node 3 over time π/2
 QubitPairTransfer(1, 3, true, 1.0, 1.5708)
@@ -157,16 +157,19 @@ function qubit_pair_transfer(
 )
     (adj_mat == adj_mat') || throw(DomainError(adj_mat, ADJ_MAT_ERR))
 
-    n = size(adj_mat, 1)
-    source_state = falses(n);
-    source_state[source] = true
-    dest_state = falses(n);
-    dest_state[dest] = true
-    fidelity(time::Float64) = abs2(source_state' * exp(im * time * adj_mat) * dest_state)
+    buf = 1:size(adj_mat, 1)
+    source_state = buf .== source
+    dest_state = buf .== dest
+
+    d, U = eigen(adj_mat)
+    left = source_state' * U
+    center = exp(diagm(d))^im
+    right = U' * dest_state
+    fidelity(time::Float64) = abs2(left * center^time * right)
 
     lower = Float64(min_time)
     upper = Float64(max_time)
-    lipschitz = 2 * norm(adj_mat, 2)
+    lipschitz = maximum(norm.(eachcol(adj_mat))) # TODO: Explain why this works in the docs
 
     res = maximize_shubert(fidelity, lower, upper, lipschitz; tol=tol)
     maximum_fidelity = res.maximum
