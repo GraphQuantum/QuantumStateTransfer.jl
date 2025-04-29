@@ -1,7 +1,7 @@
 module QuantumStateTransfer
 
-using Graphs: AbstractGraph, adjacency_matrix, nv
-using LinearAlgebra: I, norm
+using Graphs
+using LinearAlgebra
 using PrecompileTools: @setup_workload, @compile_workload
 
 include("ShubertPiyavskii/ShubertPiyavskii.jl")

@@ -1,49 +1,49 @@
 Path Graph Data
 
 Highest-fidelity qubit pairs in P_2:
-(1) 1 -> 2 with fidelity 1.0 at time 799.53529
+(1) 1 -> 2 with fidelity 1.0 at time 488.51771
 
 Highest-fidelity qubit pairs in P_3:
-(1) 1 -> 3 with fidelity 1.0 at time 197.70817
+(1) 1 -> 3 with fidelity 1.0 at time 881.9122
 
 Highest-fidelity qubit pairs in P_4:
-(1) 1 -> 4 with fidelity 1.0 at time 958.18412
-(2) 2 -> 3 with fidelity 0.99998 at time 505.78674
+(1) 1 -> 4 with fidelity 0.99981 at time 399.00646
+(2) 2 -> 3 with fidelity 0.99993 at time 958.19076
 
 Highest-fidelity qubit pairs in P_5:
-(1) 1 -> 5 with fidelity 1.0 at time 656.59299
-(2) 2 -> 4 with fidelity 1.0 at time 656.59405
+(1) 1 -> 5 with fidelity 0.99993 at time 304.72501
+(2) 2 -> 4 with fidelity 0.99995 at time 656.58969
 
 Highest-fidelity qubit pairs in P_6:
-(1) 1 -> 6 with fidelity 0.99949 at time 356.50459
-(2) 2 -> 5 with fidelity 0.99888 at time 356.51027
-(3) 3 -> 4 with fidelity 0.99946 at time 356.52466
+(1) 1 -> 6 with fidelity 0.99949 at time 356.50537
+(2) 2 -> 5 with fidelity 0.99689 at time 356.48387
+(3) 3 -> 4 with fidelity 0.99945 at time 356.52459
 
 Highest-fidelity qubit pairs in P_7:
-(1) 1 -> 7 with fidelity 0.99053 at time 644.31329
-(2) 2 -> 6 with fidelity 0.98487 at time 644.30576
-(3) 3 -> 5 with fidelity 0.98956 at time 644.34678
+(1) 1 -> 7 with fidelity 0.99051 at time 644.30913
+(2) 2 -> 6 with fidelity 0.98381 at time 644.32739
+(3) 3 -> 5 with fidelity 0.98945 at time 644.334
 
 Highest-fidelity qubit pairs in P_8:
-(1) 2 -> 7 with fidelity 0.91458 at time 64.49274
-(2) 4 -> 5 with fidelity 0.91764 at time 428.82301
+(1) 2 -> 7 with fidelity 0.91414 at time 64.47688
+(2) 4 -> 5 with fidelity 0.91765 at time 428.83129
 
 Highest-fidelity qubit pairs in P_9:
-(1) 3 -> 7 with fidelity 0.99303 at time 320.39663
+(1) 3 -> 7 with fidelity 0.992 at time 320.37217
 
 Highest-fidelity qubit pairs in P_10:
-(1) 1 -> 10 with fidelity 0.96932 at time 833.68813
+(1) 1 -> 10 with fidelity 0.96932 at time 833.68815
 
 Highest-fidelity qubit pairs in P_11:
-(1) 4 -> 8 with fidelity 0.97055 at time 643.93013
+(1) 4 -> 8 with fidelity 0.96991 at time 643.91456
 
 Highest-fidelity qubit pairs in P_12:
-(1) 2 -> 11 with fidelity 0.93803 at time 861.38693
-(2) 3 -> 10 with fidelity 0.94517 at time 423.02574
-(3) 6 -> 7 with fidelity 0.94304 at time 932.71067
+(1) 2 -> 11 with fidelity 0.93786 at time 861.39494
+(2) 3 -> 10 with fidelity 0.94491 at time 423.03581
+(3) 6 -> 7 with fidelity 0.94258 at time 932.72378
 
 Highest-fidelity qubit pairs in P_13:
-(1) 3 -> 11 with fidelity 0.93283 at time 486.39271
+(1) 3 -> 11 with fidelity 0.93269 at time 486.38437
 
 Highest-fidelity qubit pairs in P_14:
-(1) 5 -> 10 with fidelity 0.85871 at time 564.55372
+(1) 5 -> 10 with fidelity 0.85845 at time 564.56559
