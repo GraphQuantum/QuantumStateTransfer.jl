@@ -2,8 +2,7 @@ module ShubertPiyavskii
 
 using DataStructures: BinaryMaxHeap
 
-include("ErrorMessages.jl")
-using .ErrorMessages.ShubertPiyavskii
+include("error_messages.jl")
 
 export GlobalMaximizationResult, maximize_shubert
 
