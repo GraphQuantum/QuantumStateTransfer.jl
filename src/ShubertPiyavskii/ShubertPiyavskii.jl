@@ -1,3 +1,9 @@
+# Copyright 2025 Luis M. B. Varona and Nathaniel Johnston
+#
+# Licensed under the MIT license <LICENSE-MIT or
+# http://opensource.org/licenses/MIT>, at your option. This file may not be
+# copied, modified, or distributed except according to those terms.
+
 module ShubertPiyavskii
 
 using DataStructures: BinaryMaxHeap
