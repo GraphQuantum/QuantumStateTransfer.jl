@@ -1,3 +1,9 @@
+# Copyright 2025 Luis M. B. Varona and Nathaniel Johnston
+#
+# Licensed under the MIT license <LICENSE or
+# http://opensource.org/licenses/MIT>. This file may not be copied, mofified, or
+# distributed except according to those terms.
+
 const TIME_STEPS::StepRangeLen{Float64} = 0:(π / 200):5
 const TIME_STEPS_STR::String = "0:(π / 200):5"
 

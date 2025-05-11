@@ -1,3 +1,9 @@
+# Copyright 2025 Luis M. B. Varona and Nathaniel Johnston
+#
+# Licensed under the MIT license <LICENSE or
+# http://opensource.org/licenses/MIT>. This file may not be copied, mofified, or
+# distributed except according to those terms.
+
 const MIN_TIME = 0
 const MAX_TIME = 4π
 # TODO: Another "standard" option is 1e-5... but SP runs too slow then. Decide?
