@@ -169,9 +169,8 @@ function qubit_pair_transfer(
 
     d, U = eigen(adj_mat)
     left = source_state' * U
-    center = exp(diagm(d))^im
     right = U' * dest_state
-    fidelity(time::Float64) = abs2(left * center^time * right)
+    fidelity(time::Float64) = abs2(left * Diagonal(exp.(im * time * d)) * right)
 
     lower = Float64(min_time)
     upper = Float64(max_time)
