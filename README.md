@@ -9,3 +9,7 @@
 qubits in quantum spin networks.
 
 **(CURRENTLY UNDER DEVELOPMENT)**
+
+## Credits
+
+Created by [Luis M. B. Varona](https://github.com/Luis-Varona), [Dr. Nathaniel Johnston](https://github.com/nathanieljohnston), and Dr. Sarah Plosker.
