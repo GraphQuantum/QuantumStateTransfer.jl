@@ -1,0 +1,7 @@
+[deps]
+QuantumStateTransfer = "5afda8b7-781f-4fb2-840f-bdb502253c46"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[compat]
+Test = "1.10"
+julia = "1.10"
