@@ -2,23 +2,25 @@ name = "QuantumStateTransfer"
 uuid = "5afda8b7-781f-4fb2-840f-bdb502253c46"
 keywords = ["quantum computing", "quantum information", "linear algebra", "graph theory", "optimization"]
 license = "MIT"
+version = "0.1.0-dev"
 authors = ["Luis M. B. Varona <lm.varona@outlook.com>", "Nathaniel Johnston <nathaniel.johnston@gmail.com>"]
 description = "A Julia toolbox for modeling state transfer on quantum networks."
 homepage = "https://graphquantum.github.io/QuantumStateTransfer.jl/"
 maintainers = ["Luis M. B. Varona <lm.varona@outlook.com>"]
 readme = "README.md"
 repository = "https://github.com/GraphQuantum/QuantumStateTransfer.jl"
-version = "0.1.0-dev"
 
 [deps]
 DataStructures = "864edb3b-99cc-5e75-8d2d-829cb0a9cfe8"
 Graphs = "86223c79-3864-5bf0-83f7-82e725a168b6"
 LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Optim = "429524aa-4258-5aef-a3af-852621145aeb"
 PrecompileTools = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
 
 [compat]
 DataStructures = "0.18.15 - 0.19"
 Graphs = "1.10"
 LinearAlgebra = "1.10"
+Optim = "1.13.2"
 PrecompileTools = "1.2"
 julia = "1.10"
