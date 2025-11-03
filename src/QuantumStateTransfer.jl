@@ -4,8 +4,28 @@
 # http://opensource.org/licenses/MIT>. This file may not be copied, modified, or
 # distributed except according to those terms.
 
+"""
+    QuantumStateTransfer
+
+A Julia toolbox for modeling state transfer on quantum networks.
+"""
 module QuantumStateTransfer
 
-# Write your package code here.
+using DataStructures
+using Graphs
+using LinearAlgebra
+using PrecompileTools: @setup_workload, @compile_workload
+
+include("utils.jl")
+include("types.jl")
+
+include("EpsilonOptimization/EpsilonOptimization.jl")
+using .EpsilonOptimization
+
+include("core.jl")
+
+# TODO: Exports
+
+include("startup.jl")
 
 end
