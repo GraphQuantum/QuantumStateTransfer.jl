@@ -62,5 +62,16 @@ Insights from [Benjamin Talbot](https://github.com/Benjamin-Talbot) and [Peter L
 
 Additional thanks to [Madiha Waqar](https://github.com/madihaahmed1) for the *GraphQuantum* logo.
 
+## Index
+
+### `QuantumStateTransfer`
+
 ```@index
+Modules = [QuantumStateTransfer]
+```
+
+### `QuantumStateTransfer.EpsilonOptimization`
+
+```@index
+Modules = [QuantumStateTransfer.EpsilonOptimization]
 ```

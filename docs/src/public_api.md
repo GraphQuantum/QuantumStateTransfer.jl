@@ -14,6 +14,11 @@ Modules = [QuantumStateTransfer]
 Private = false
 ```
 
+```@autodocs
+Modules = [QuantumStateTransfer.EpsilonOptimization]
+Private = false
+```
+
 ## References
 
 ```@bibliography
