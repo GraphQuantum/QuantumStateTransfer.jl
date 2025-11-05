@@ -75,8 +75,12 @@ function _epsilon_minimize_impl(
     while (
         iterations < max_iterations &&
         !isempty(rects_cand) &&
-        min(lower_bound, first(rects_cand).lower_bound) <= threshold &&
-        minimum - threshold >= epsilon
+        (
+            isinf(threshold) || (
+                min(lower_bound, first(rects_cand).lower_bound) <= threshold &&
+                minimum - threshold >= epsilon
+            )
+        )
     )
         rect = pop!(rects_cand)
         f_val = f(rect.x_min)
@@ -112,15 +116,15 @@ function _epsilon_minimize_impl(
 
     return EpsilonMinimizationResult(
         solver,
-        epsilon,
         lower,
         upper,
+        epsilon,
         minimizer,
         minimum,
         (
             epsilon_optimal=minimum - lower_bound < epsilon,
             threshold_reached=minimum - threshold < epsilon,
-            threshold_unreachable=lower_bound > threshold,
+            threshold_unreachable=-Inf < threshold < lower_bound,
             iterations=iterations >= max_iterations,
         ),
     )
