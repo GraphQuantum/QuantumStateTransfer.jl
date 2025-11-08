@@ -31,6 +31,7 @@ export
     AlphaBranchAndBound
 
 include("types.jl")
+include("utils.jl")
 include("core.jl")
 
 include("solvers/lipschitz_branch_and_bound.jl")

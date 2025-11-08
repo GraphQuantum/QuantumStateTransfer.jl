@@ -11,9 +11,25 @@
 """
 struct AlphaBranchAndBound <: AbstractEpsilonSolver
     epsilon::Real
-    threshold::Union{<:Real,Nothing}
+    target::Union{<:Real,Nothing}
     max_iterations::Union{<:Integer,Nothing}
     alpha::Real
+
+    function AlphaBranchAndBound(
+        epsilon::Real,
+        alpha::Real;
+        target::Union{<:Real,Nothing}=nothing,
+        max_iterations::Union{<:Integer,Nothing}=nothing,
+    )
+        solver = new(epsilon, target, max_iterations, alpha)
+        validate_solver_params(solver)
+
+        if alpha <= 0
+            throw(ArgumentError("Alpha parameter must be positive, got $alpha"))
+        end
+
+        return solver
+    end
 end
 
 """
@@ -30,7 +46,7 @@ struct ABBHyperrectangle{Tx<:AbstractVector{<:Real},Tf<:Real}
     function ABBHyperrectangle(
         lower::Tx, upper::Tx, f::Function, alpha::Real
     ) where {Tx<:AbstractVector{<:Real}}
-        f_convex(x::Tx) = f(x) + alpha * sum((x .- lower) .* (upper .- x))
+        f_convex(x::Tx) = f(x) - alpha * sum((x .- lower) .* (upper .- x))
         x0 = lower .+ (upper .- lower) ./ 2
 
         res = optimize(f_convex, lower, upper, x0, Fminbox(LBFGS()))
@@ -51,10 +67,10 @@ function _epsilon_minimize_impl(
     epsilon = solver.epsilon
     alpha = solver.alpha
 
-    if isnothing(solver.threshold)
-        threshold = -Inf
+    if isnothing(solver.target)
+        target = -Inf
     else
-        threshold = solver.threshold
+        target = solver.target
     end
 
     if isnothing(solver.max_iterations)
@@ -76,9 +92,9 @@ function _epsilon_minimize_impl(
         iterations < max_iterations &&
         !isempty(rects_cand) &&
         (
-            isinf(threshold) || (
-                min(lower_bound, first(rects_cand).lower_bound) <= threshold &&
-                minimum - threshold >= epsilon
+            isinf(target) || (
+                min(lower_bound, first(rects_cand).lower_bound) <= target &&
+                minimum - target >= epsilon
             )
         )
     )
@@ -123,8 +139,8 @@ function _epsilon_minimize_impl(
         minimum,
         (
             epsilon_optimal=minimum - lower_bound < epsilon,
-            threshold_reached=minimum - threshold < epsilon,
-            threshold_unreachable=-Inf < threshold < lower_bound,
+            target_reached=minimum - target < epsilon,
+            target_unreachable=-Inf < target < lower_bound,
             iterations=iterations >= max_iterations,
         ),
     )

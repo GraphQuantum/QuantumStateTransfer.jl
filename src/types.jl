@@ -38,7 +38,9 @@ called on a newly created subtype for which no method has been defined.
 `NotImplementedError` <: `Exception`
 
 # Notes
-This struct was taken from one of the authors' other packages, MatrixBandwidth.jl.
+This struct was taken from one of the authors' other packages,
+[MatrixBandwidth.jl](https://github.com/Luis-Varona/MatrixBandwidth.jl). To avoid adding an
+unnecessary dependency, it has been copied here verbatim.
 """
 struct NotImplementedError{T<:Union{Nothing,Symbol}} <: Exception
     f::Function
