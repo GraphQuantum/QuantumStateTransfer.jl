@@ -11,9 +11,29 @@
 """
 struct LipschitzBranchAndBound <: AbstractEpsilonSolver
     epsilon::Real
-    threshold::Union{<:Real,Nothing}
+    target::Union{<:Real,Nothing}
     max_iterations::Union{<:Integer,Nothing}
     lipschitz_constant::Real
+
+    function LipschitzBranchAndBound(
+        epsilon::Real,
+        lipschitz_constant::Real;
+        target::Union{<:Real,Nothing}=nothing,
+        max_iterations::Union{<:Integer,Nothing}=nothing,
+    )
+        solver = new(epsilon, target, max_iterations, lipschitz_constant)
+        validate_solver_params(solver)
+
+        if lipschitz_constant <= 0
+            throw(
+                ArgumentError(
+                    "Lipschitz constant must be positive, got $lipschitz_constant"
+                ),
+            )
+        end
+
+        return solver
+    end
 end
 
 """
@@ -49,10 +69,10 @@ function _epsilon_minimize_impl(
     epsilon = solver.epsilon
     lipschitz_constant = solver.lipschitz_constant
 
-    if isnothing(solver.threshold)
-        threshold = -Inf
+    if isnothing(solver.target)
+        target = -Inf
     else
-        threshold = solver.threshold
+        target = solver.target
     end
 
     if isnothing(solver.max_iterations)
@@ -74,9 +94,9 @@ function _epsilon_minimize_impl(
         iterations < max_iterations &&
         !isempty(rects_cand) &&
         (
-            isinf(threshold) || (
-                min(lower_bound, first(rects_cand).lower_bound) <= threshold &&
-                minimum - threshold >= epsilon
+            isinf(target) || (
+                min(lower_bound, first(rects_cand).lower_bound) <= target &&
+                minimum - target >= epsilon
             )
         )
     )
@@ -118,8 +138,8 @@ function _epsilon_minimize_impl(
         minimum,
         (
             epsilon_optimal=minimum - lower_bound < epsilon,
-            threshold_reached=minimum - threshold < epsilon,
-            threshold_unreachable=-Inf < threshold < lower_bound,
+            target_reached=minimum - target < epsilon,
+            target_unreachable=-Inf < target < lower_bound,
             iterations=iterations >= max_iterations,
         ),
     )
