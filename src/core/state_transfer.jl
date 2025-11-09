@@ -131,8 +131,7 @@ end
 [TODO: Write here]
 
 # Notes
-[TODO: Write here. Proof sketch of bounds on Lipschitz and alpha constants, plus further
-relevant references?]
+[TODO: Refer to [`transfer_fidelity_deriv_bound`](@ref) for proof sketch of bounds]
 """
 function max_state_transfer(g::AbstractGraph, args...)
     if !is_simple(g)
@@ -151,7 +150,7 @@ function max_state_transfer(
     epsilon::Real,
     method::Symbol=:lipschitz_bb,
 ) where {Tl<:Union{Integer,Tuple{Integer,Integer}}}
-    if !is_zero_diagonal_symmetric(A)
+    if !is_zero_diag_symmetric(A)
         throw(ArgumentError("Matrix must be symmetric with zero diagonal"))
     end
 
@@ -194,8 +193,7 @@ end
 [TODO: Write here]
 
 # Notes
-[TODO: Write here. Proof sketch of bounds on Lipschitz and alpha constants, plus further
-relevant references?]
+[TODO: Refer to [`transfer_fidelity_deriv_bound`](@ref) for proof sketch of bounds]
 """
 function check_state_transfer(g::AbstractGraph, args...)
     if !is_simple(g)
@@ -215,7 +213,7 @@ function check_state_transfer(
     epsilon::Real,
     method::Symbol=:lipschitz_bb,
 ) where {Tl<:Union{Integer,Tuple{Integer,Integer}}}
-    if !is_zero_diagonal_symmetric(A)
+    if !is_zero_diag_symmetric(A)
         throw(ArgumentError("Matrix must be symmetric with zero diagonal"))
     end
 
@@ -352,12 +350,12 @@ function _optimize_state_transfer_impl(input::_StateTransferProblemInput)
     end
 
     if method == :lipschitz_bb
-        lipschitz_constant = maximum(norm.(eachcol(A)))
+        lipschitz_constant = transfer_fidelity_deriv_bound(A, 1)
         solver = LipschitzBranchAndBound(
             epsilon, lipschitz_constant; target=target_infidelity
         )
     elseif method == :alpha_bb
-        alpha = maximum(norm.(eachcol(A^2))) / 2
+        alpha = transfer_fidelity_deriv_bound(A, 2) / 2
         solver = AlphaBranchAndBound(epsilon, alpha; target=target_infidelity)
     else
         throw(

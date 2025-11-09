@@ -22,9 +22,9 @@ include("types.jl")
 include("EpsilonOptimization/EpsilonOptimization.jl")
 using .EpsilonOptimization
 
-include("state_transfer.jl")
-include("uniform_mixing.jl")
-include("fractional_revival.jl")
+include("core/state_transfer.jl")
+include("core/uniform_mixing.jl")
+include("core/fractional_revival.jl")
 
 # TODO: Exports (add more later)
 export max_state_transfer, check_state_transfer
