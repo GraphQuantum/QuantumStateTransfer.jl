@@ -5,7 +5,7 @@
 # distributed except according to those terms.
 
 """
-    is_zero_diagonal_symmetric(A) -> Bool
+    is_zero_diag_symmetric(A) -> Bool
 
 Check whether a matrix `A` is symmetric with a zero diagonal.
 
@@ -24,7 +24,7 @@ only consider here real-valued adjacency matrices) is required for the walk Hami
 # Examples
 [TODO: Write here]
 """
-function is_zero_diagonal_symmetric(A::AbstractMatrix{<:Real})
+function is_zero_diag_symmetric(A::AbstractMatrix{<:Real})
     (m, n) = size(A)
 
     return m == n && # Square
@@ -53,4 +53,22 @@ adjacency matrix of `g`.
 """
 function is_simple(g::AbstractGraph)
     return !isdirected(g) && !has_self_loops(g)
+end
+
+"""
+    transfer_fidelity_deriv_bound(A, order) -> Float64
+
+[TODO: Write here]
+
+# Arguments
+[TODO: Write here]
+
+# Returns
+[TODO: Write here]
+
+# Notes
+[TODO: Proof sketch of bound, plus further relevant references?]
+"""
+function transfer_fidelity_deriv_bound(A::Matrix{Float64}, order::Int)
+    return maximum(norm.eachcol(A^order))
 end
