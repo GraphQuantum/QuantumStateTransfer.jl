@@ -9,11 +9,11 @@
 
 Check whether a matrix `A` is symmetric with a zero diagonal.
 
-Supposing that `A` is the adjacency matrix of a graph representing a quantum spin network, a
-nonzero diagonal would indicate couplings between qubits and themselves, which is physically
-nonsensical. On the other hand, symmetry (or rather Hermicity in the general case, but we
-only consider here real-valued adjacency matrices) is required for the walk Hamiltonian
-``eⁱᵗᴬ`` to be unitary.
+Supposing that `A` is the adjacency (and walk Hamiltonian) of a graph representing a quantum
+spin network, a nonzero diagonal would indicate couplings between qubits and themselves,
+which is physically nonsensical. On the other hand, symmetry (Hermicity in the general case,
+but we only consider here real-valued adjacency matrices) is required for the transition
+matrix ``eⁱᵗᴬ`` to be unitary.
 
 # Arguments
 - `A::AbstractMatrix{<:Real}`: The matrix to check.
@@ -37,10 +37,10 @@ end
 
 Check whether a graph `g` is simple (i.e., undirected with no self-loops).
 
-Supposing that `g` represents a quantum spin network, self-loops would indicate couplings
-between qubits and themselves, which is physically nonsensical. On the other hand,
-undirectedness is required for the walk Hamiltonian ``eⁱᵗᴬ`` to be unitary, where `A` is the
-adjacency matrix of `g`.
+Supposing that `g` represents a quantum spin network (whose walk Hamiltonian is the
+adjacency matrix `A` of `g`), self-loops would indicate couplings between qubits and
+themselves, which is physically nonsensical. On the other hand, undirectedness is required
+for the transition matrix ``eⁱᵗᴬ`` to be unitary.
 
 # Arguments
 - `g::AbstractGraph`: The graph to check.
