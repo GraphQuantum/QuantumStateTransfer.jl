@@ -23,7 +23,7 @@ include("EpsilonOptimization/EpsilonOptimization.jl")
 using .EpsilonOptimization
 
 include("core/state_transfer.jl")
-include("core/uniform_mixing.jl")
+include("core/state_mixing.jl")
 include("core/fractional_revival.jl")
 
 # TODO: Exports (add more later)
