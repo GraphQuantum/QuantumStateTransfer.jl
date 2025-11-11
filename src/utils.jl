@@ -70,5 +70,23 @@ end
 [TODO: Proof sketch of bound, plus further relevant references?]
 """
 function transfer_fidelity_deriv_bound(A::Matrix{Float64}, order::Int)
-    return maximum(norm.eachcol(A^order))
+    return opnorm(A)^order # Equivalent to `opnorm(A^order)`, since `A` is symmetric
+end
+
+"""
+    mixing_uniformity_deriv_bound(A, order) -> Float64
+
+[TODO: Write here]
+
+# Arguments
+[TODO: Write here]
+
+# Returns
+[TODO: Write here]
+
+# Notes
+[TODO: Proof sketch of bound, plus further relevant references?]
+"""
+function mixing_uniformity_deriv_bound(A::Matrix{Float64}, order::Int)
+    return 2 * opnorm(A)^order # Equivalent to `2 * opnorm(A^order)`, since `A` is symmetric
 end

@@ -24,7 +24,7 @@ struct StateTransferMaximizationResult{
 end
 
 function Base.show(io::IO, res::StateTransferMaximizationResult{Tn,Int}) where {Tn}
-    println(io, "Vertex State Transfer Maximization:")
+    println(io, "Results of Vertex State Transfer Maximization")
     println(io, " * Network: $(summary(res.network))")
     println(io, " * Source vertex: $(res.src)")
     println(io, " * Destination vertex: $(res.dst)")
@@ -39,7 +39,7 @@ end
 function Base.show(
     io::IO, res::StateTransferMaximizationResult{Tn,Tuple{Int,Int}}
 ) where {Tn}
-    println(io, "Pair State Transfer Maximization:")
+    println(io, "Results of Pair State Transfer Maximization")
     println(io, " * Network: $(summary(res.network))")
     println(io, " * Source vertices: $(res.src)")
     println(io, " * Destination vertices: $(res.dst)")
@@ -72,7 +72,7 @@ struct StateTransferRecognitionResult{
 end
 
 function Base.show(io::IO, res::StateTransferRecognitionResult{Tn,Int}) where {Tn}
-    println(io, "Vertex State Transfer Recognition:")
+    println(io, "Results of Vertex State Transfer Recognition")
     println(io, " * Network: $(summary(res.network))")
     println(io, " * Source vertex: $(res.src)")
     println(io, " * Destination vertex: $(res.dst)")
@@ -92,7 +92,7 @@ end
 function Base.show(
     io::IO, res::StateTransferRecognitionResult{Tn,Tuple{Int,Int}}
 ) where {Tn}
-    println(io, "Pair State Transfer Recognition:")
+    println(io, "Results of Pair State Transfer Recognition")
     println(io, " * Network: $(summary(res.network))")
     println(io, " * Source vertices: $(res.src)")
     println(io, " * Destination vertices: $(res.dst)")
@@ -110,8 +110,8 @@ function Base.show(
 end
 
 """
-    max_state_transfer(g::AbstractGraph, args...) -> StateTransferMaximizationResult
-    max_state_transfer(A::AbstractMatrix{<:Real}, args...) -> StateTransferMaximizationResult
+    maximize_state_transfer(g::AbstractGraph, args...) -> StateTransferMaximizationResult
+    maximize_state_transfer(A::AbstractMatrix{<:Real}, args...) -> StateTransferMaximizationResult
 
 [TODO: Write here]
 
@@ -133,15 +133,15 @@ end
 # Notes
 [TODO: Refer to [`transfer_fidelity_deriv_bound`](@ref) for proof sketch of bounds]
 """
-function max_state_transfer(g::AbstractGraph, args...)
+function maximize_state_transfer(g::AbstractGraph, args...)
     if !is_simple(g)
         throw(ArgumentError("Graph must be undirected with no self-loops"))
     end
 
-    return max_state_transfer(adjacency_matrix(g), args...)
+    return maximize_state_transfer(adjacency_matrix(g), args...)
 end
 
-function max_state_transfer(
+function maximize_state_transfer(
     A::AbstractMatrix{<:Real},
     src::Tl,
     dst::Tl,
@@ -350,10 +350,8 @@ function _optimize_state_transfer_impl(input::_StateTransferProblemInput)
     end
 
     if method == :lipschitz_bb
-        lipschitz_constant = transfer_fidelity_deriv_bound(A, 1)
-        solver = LipschitzBranchAndBound(
-            epsilon, lipschitz_constant; target=target_infidelity
-        )
+        lipschitz_const = transfer_fidelity_deriv_bound(A, 1)
+        solver = LipschitzBranchAndBound(epsilon, lipschitz_const; target=target_infidelity)
     elseif method == :alpha_bb
         alpha = transfer_fidelity_deriv_bound(A, 2) / 2
         solver = AlphaBranchAndBound(epsilon, alpha; target=target_infidelity)
