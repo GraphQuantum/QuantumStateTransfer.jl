@@ -13,7 +13,7 @@ Supposing that `A` is the adjacency matrix of a graph representing a quantum spi
 nonzero diagonal would indicate couplings between qubits and themselves, which is physically
 nonsensical. On the other hand, symmetry (or rather Hermicity in the general case, but we
 only consider here real-valued adjacency matrices) is required for the walk Hamiltonian
-``eᶦᵗᴬ`` to be unitary.
+``eⁱᵗᴬ`` to be unitary.
 
 # Arguments
 - `A::AbstractMatrix{<:Real}`: The matrix to check.
@@ -39,7 +39,7 @@ Check whether a graph `g` is simple (i.e., undirected with no self-loops).
 
 Supposing that `g` represents a quantum spin network, self-loops would indicate couplings
 between qubits and themselves, which is physically nonsensical. On the other hand,
-undirectedness is required for the walk Hamiltonian ``eᶦᵗᴬ`` to be unitary, where `A` is the
+undirectedness is required for the walk Hamiltonian ``eⁱᵗᴬ`` to be unitary, where `A` is the
 adjacency matrix of `g`.
 
 # Arguments
