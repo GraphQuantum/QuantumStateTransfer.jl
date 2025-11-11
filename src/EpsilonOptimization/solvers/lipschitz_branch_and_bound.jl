@@ -13,22 +13,20 @@ struct LipschitzBranchAndBound <: AbstractEpsilonSolver
     epsilon::Real
     target::Union{<:Real,Nothing}
     max_iterations::Union{<:Integer,Nothing}
-    lipschitz_constant::Real
+    lipschitz_const::Real
 
     function LipschitzBranchAndBound(
         epsilon::Real,
-        lipschitz_constant::Real;
+        lipschitz_const::Real;
         target::Union{<:Real,Nothing}=nothing,
         max_iterations::Union{<:Integer,Nothing}=nothing,
     )
-        solver = new(epsilon, target, max_iterations, lipschitz_constant)
+        solver = new(epsilon, target, max_iterations, lipschitz_const)
         validate_solver_params(solver)
 
-        if lipschitz_constant <= 0
+        if lipschitz_const <= 0
             throw(
-                ArgumentError(
-                    "Lipschitz constant must be positive, got $lipschitz_constant"
-                ),
+                ArgumentError("Lipschitz constant must be positive, got $lipschitz_const")
             )
         end
 
@@ -49,12 +47,12 @@ struct LBBHyperrectangle{Tx<:AbstractVector{<:Real},Tf<:Real}
     lower_bound::Tf
 
     function LBBHyperrectangle(
-        lower::Tx, upper::Tx, f::Function, lipschitz_constant::Real
+        lower::Tx, upper::Tx, f::Function, lipschitz_const::Real
     ) where {Tx<:AbstractVector{<:Real}}
         center = lower .+ (upper .- lower) ./ 2
         f_center = f(center)
         diameter = norm(upper .- lower)
-        lower_bound = f_center - (lipschitz_constant / 2) * diameter
+        lower_bound = f_center - (lipschitz_const / 2) * diameter
         return new{Tx,typeof(f_center)}(lower, upper, center, f_center, lower_bound)
     end
 end
@@ -67,7 +65,7 @@ function _epsilon_minimize_impl(
     f::Function, lower::Tx, upper::Tx, solver::LipschitzBranchAndBound
 ) where {Tx<:AbstractVector{<:Real}}
     epsilon = solver.epsilon
-    lipschitz_constant = solver.lipschitz_constant
+    lipschitz_const = solver.lipschitz_const
 
     if isnothing(solver.target)
         target = -Inf
@@ -81,7 +79,7 @@ function _epsilon_minimize_impl(
         max_iterations = solver.max_iterations
     end
 
-    rect_init = LBBHyperrectangle(lower, upper, f, solver.lipschitz_constant)
+    rect_init = LBBHyperrectangle(lower, upper, f, solver.lipschitz_const)
     rects_cand = BinaryMinHeap{LBBHyperrectangle{Tx,typeof(rect_init.f_center)}}()
     push!(rects_cand, rect_init)
 
@@ -107,7 +105,7 @@ function _epsilon_minimize_impl(
             minimum = rect.f_center
         end
 
-        children = _lbb_split_hyperrectangle(rect, f, lipschitz_constant)
+        children = _lbb_split_hyperrectangle(rect, f, lipschitz_const)
 
         for child in children
             if child.f_center < minimum
@@ -146,7 +144,7 @@ function _epsilon_minimize_impl(
 end
 
 function _lbb_split_hyperrectangle(
-    rect::LBBHyperrectangle, f::Function, lipschitz_constant::Real
+    rect::LBBHyperrectangle, f::Function, lipschitz_const::Real
 )
     lower = rect.lower
     upper = rect.upper
@@ -157,12 +155,12 @@ function _lbb_split_hyperrectangle(
     lower1 = copy(lower)
     upper1 = copy(upper)
     upper1[dim_split] = mid
-    child1 = LBBHyperrectangle(lower1, upper1, f, lipschitz_constant)
+    child1 = LBBHyperrectangle(lower1, upper1, f, lipschitz_const)
 
     lower2 = copy(lower)
     upper2 = copy(upper)
     lower2[dim_split] = mid
-    child2 = LBBHyperrectangle(lower2, upper2, f, lipschitz_constant)
+    child2 = LBBHyperrectangle(lower2, upper2, f, lipschitz_const)
 
     return child1, child2
 end
