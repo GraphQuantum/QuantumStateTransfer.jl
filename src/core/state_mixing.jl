@@ -26,7 +26,7 @@ function Base.show(io::IO, res::StateMixingMaximizationResult)
     println(io, " * Time interval: [$(res.t_lower), $(res.t_upper)]")
     println(io, " * Epsilon tolerance: $(res.epsilon)")
     println(io, " * Maximizing time: $(res.maximizer)")
-    println(io, " * Maximum uniformity: $(res.max_mixing)")
+    println(io, " * Maximum uniformity: $(res.max_uniformity)")
 
     return nothing
 end
