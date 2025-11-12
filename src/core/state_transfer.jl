@@ -150,11 +150,11 @@ function maximize_state_transfer(
     epsilon::Real,
     method::Symbol=:lipschitz_bb,
 ) where {Tl<:Union{Integer,Tuple{Integer,Integer}}}
-    if !is_zero_diag_symmetric(A)
+    if !is_zerodiag_symmetric(A)
         throw(ArgumentError("Matrix must be symmetric with zero diagonal"))
     end
 
-    _validate_state_transfer_params(t_lower, t_upper, epsilon, method)
+    _validate_problem_params(t_lower, t_upper, epsilon)
 
     input = _preprocess_state_transfer_input(A, src, dst, t_lower, t_upper, epsilon, method)
     res = _optimize_state_transfer_impl(input)
@@ -209,22 +209,22 @@ function check_state_transfer(
     dst::Tl,
     t_lower::Real,
     t_upper::Real,
-    target_fidelity::Real,
     epsilon::Real,
+    target_fidelity::Real,
     method::Symbol=:lipschitz_bb,
 ) where {Tl<:Union{Integer,Tuple{Integer,Integer}}}
-    if !is_zero_diag_symmetric(A)
+    if !is_zerodiag_symmetric(A)
         throw(ArgumentError("Matrix must be symmetric with zero diagonal"))
     end
 
-    _validate_state_transfer_params(t_lower, t_upper, epsilon, method, target_fidelity)
+    _validate_problem_params(t_lower, t_upper, epsilon, target_fidelity)
 
     input = _preprocess_state_transfer_input(
         A, src, dst, t_lower, t_upper, epsilon, method, target_fidelity
     )
     res = _optimize_state_transfer_impl(input)
 
-    achieved = res.target_reached
+    achieved = res.stopped_by[:target_reached]
 
     if achieved
         time_achieved = res.minimizer[1]
@@ -241,7 +241,7 @@ function check_state_transfer(
         input.t_lower,
         input.t_upper,
         input.epsilon,
-        target_fidelity,
+        input.target_fidelity,
         achieved,
         time_achieved,
         fidelity_achieved,
@@ -259,44 +259,6 @@ struct _StateTransferProblemInput{Tl<:Union{Int,Tuple{Int,Int}}}
     target_fidelity::Union{Nothing,Float64}
 end
 
-function _validate_state_transfer_params(
-    t_lower::Real,
-    t_upper::Real,
-    epsilon::Real,
-    method::Symbol,
-    target_fidelity::Union{Nothing,Float64}=nothing,
-)
-    if t_lower > t_upper
-        throw(
-            ArgumentError(
-                "Lower time bound must be less than or equal to upper bound, got [$t_lower, $t_upper]",
-            ),
-        )
-    end
-
-    if epsilon <= 0
-        throw(ArgumentError("Epsilon tolerance must be positive, got $epsilon"))
-    end
-
-    if !(method in (:lipschitz_bb, :alpha_bb))
-        throw(
-            ArgumentError(
-                "Unsupported epsilon-convergent optimization method; must be `:lipschitz_bb` or `:alpha_bb`, got $method",
-            ),
-        )
-    end
-
-    if !isnothing(target_fidelity)
-        if !(0 < target_fidelity <= 1)
-            throw(
-                ArgumentError(
-                    "Target fidelity must be in the interval (0, 1], got $target_fidelity"
-                ),
-            )
-        end
-    end
-end
-
 function _preprocess_state_transfer_input(
     A::AbstractMatrix{<:Real},
     src::Tl,
@@ -305,7 +267,7 @@ function _preprocess_state_transfer_input(
     t_upper::Real,
     epsilon::Real,
     method::Symbol,
-    target_fidelity::Union{Nothing,Float64}=nothing,
+    target_fidelity::Union{Nothing,Real}=nothing,
 ) where {Tl<:Union{Integer,Tuple{Integer,Integer}}}
     A = Matrix{Float64}(A)
     src = _preprocess_label(src)
@@ -313,6 +275,10 @@ function _preprocess_state_transfer_input(
     t_lower = Float64(t_lower)
     t_upper = Float64(t_upper)
     epsilon = Float64(epsilon)
+
+    if !isnothing(target_fidelity)
+        target_fidelity = Float64(target_fidelity)
+    end
 
     return _StateTransferProblemInput(
         A, src, dst, t_lower, t_upper, epsilon, method, target_fidelity

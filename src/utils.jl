@@ -5,7 +5,7 @@
 # distributed except according to those terms.
 
 """
-    is_zero_diag_symmetric(A) -> Bool
+    is_zerodiag_symmetric(A) -> Bool
 
 Check whether a matrix `A` is symmetric with a zero diagonal.
 
@@ -24,7 +24,7 @@ matrix ``eⁱᵗᴬ`` to be unitary.
 # Examples
 [TODO: Write here]
 """
-function is_zero_diag_symmetric(A::AbstractMatrix{<:Real})
+function is_zerodiag_symmetric(A::AbstractMatrix{<:Real})
     (m, n) = size(A)
 
     return m == n && # Square
@@ -52,7 +52,7 @@ for the transition matrix ``eⁱᵗᴬ`` to be unitary.
 [TODO: Write here]
 """
 function is_simple(g::AbstractGraph)
-    return !isdirected(g) && !has_self_loops(g)
+    return !is_directed(g) && !has_self_loops(g)
 end
 
 """
@@ -89,4 +89,35 @@ end
 """
 function mixing_uniformity_deriv_bound(A::Matrix{Float64}, order::Int)
     return 2 * opnorm(A)^order # Equivalent to `2 * opnorm(A^order)`, since `A` is symmetric
+end
+
+function _validate_problem_params(
+    t_lower::Real,
+    t_upper::Real,
+    epsilon::Real,
+    target_fidelity::Union{Nothing,Real}=nothing,
+)
+    if t_lower > t_upper
+        throw(
+            ArgumentError(
+                "Lower time bound must be less than or equal to upper bound, got [$t_lower, $t_upper]",
+            ),
+        )
+    end
+
+    if epsilon <= 0
+        throw(ArgumentError("Epsilon tolerance must be positive, got $epsilon"))
+    end
+
+    if !isnothing(target_fidelity)
+        if !(0 < target_fidelity <= 1)
+            throw(
+                ArgumentError(
+                    "Target fidelity must be in the interval (0, 1], got $target_fidelity"
+                ),
+            )
+        end
+    end
+
+    return nothing
 end
