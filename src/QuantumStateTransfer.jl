@@ -27,7 +27,8 @@ include("core/state_mixing.jl")
 include("core/fractional_revival.jl")
 
 # TODO: Exports (add more later)
-export maximize_state_transfer, check_state_transfer
+export maximize_state_transfer,
+    check_state_transfer, maximize_state_mixing, check_state_mixing
 
 include("startup.jl")
 
