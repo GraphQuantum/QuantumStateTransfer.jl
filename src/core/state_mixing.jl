@@ -266,13 +266,14 @@ function _optimize_state_mixing_impl(input::_StateMixingProblemInput)
     end
 
     eigenvals, eigenvecs = eigen(A)
-    right = eigenvecs[:, node]
+    right = eigenvecs'[:, node]
     n = size(A, 1)
     perf_mixed = fill(1 / n, n)
 
     function nonuniformity(t::Vector{Float64})
-        diff = abs2.(eigenvecs * Diagonal(exp.(im * t[1] * eigenvals)) * right) - perf_mixed
-        return 1 - norm(diff)
+        return norm(
+            abs2.(eigenvecs * Diagonal(exp.(im * t[1] * eigenvals)) * right) - perf_mixed
+        )
     end
 
     return epsilon_minimize(nonuniformity, [t_lower], [t_upper], solver)
